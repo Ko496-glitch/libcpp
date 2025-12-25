@@ -1,2 +1,2 @@
-# Cp-algo-in-C-templates
+# Templates C plusplus
 Rewriting algos in C++ templates
