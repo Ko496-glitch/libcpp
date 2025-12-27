@@ -4,7 +4,7 @@
 #include<new>
 #include<type_traits>
 
-template<typename T, std::size_t N>
+template<typename T>
 class optional{
   std::aligned_storage_t<sizeof(T), alignof(T)> storage;
     // storage here will be our array for current object slot space.
@@ -20,7 +20,6 @@ class optional{
   
   public:
   
-
   void clear(){
     if(this->engaged){
       ptr()->~T();
@@ -36,7 +35,7 @@ class optional{
 
 
   // Copy Constructor --- ----------------------------------
-  template<typename U = T, typename std::enable_if_t<std::is_copy_constructible_v<U>>>
+  template<typename U = T, typename =  std::enable_if_t<std::is_copy_constructible_v<U>>>
   optional(const optional& other) noexcept : engaged(false){
     if(other.engaged){
       new (storage)T(*other.storage);
@@ -67,12 +66,57 @@ class optional{
     }else if(!this->engaged && !other.engaged){
       return *this;
     }else if(this->engaged && !other.engaged){
-     ptr()->~T();
+      clear();
     }else{
-      new(storage)T(*other.storage);
+      new(storage)T(*other.ptr());
       this->engaged = true;
     }
   }
+ 
+
+    #if 0
+    optional operator(optional&&other){
+        if(this == other)return *this;
+        
+        if(this->engaged && other.engaged){
+            /// To Do
+        }
+    }
+#endif
+
+
+
+
+
+
+  // Observers -----------------------------------------
+  bool has_value()const noexcept{
+    return this->engaged;
+  }
+
+  explicit operator bool()const noexcept{
+    return this->engaged;
+  }
+  
+  T& operator*()noexcept {
+    return *this->ptr();
+  }
+  
+  const T& operator*() const noexcept {
+    return *this->ptr();
+  }
+
+  T* operator->() noexcept {
+    return this->ptr();
+  }
+
+  const T* operator->() const noexcept {
+    return this->ptr();
+  } 
+
+
+
+
    
 };
 
