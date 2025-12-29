@@ -190,7 +190,7 @@ R add_then(Callable&& f)& noexcept(std::is_nothrow_invocable_v<Callable, T&>){
   if(this->engaged){
     return std::invoke(std::forward<Callable>(f),*this->ptr());
   }
-  return R{};
+  return lib::null_opt;
 }
 
 template<typename Callable,typename R = std::invoke_result_t<Callable,T&&>,typename = std::enable_if_t<lib::is_optional_v<R>>>
@@ -198,7 +198,7 @@ R add_then(Callable&& f)&& noexcept(std::is_nothrow_invocable_v<Callable, T&&>){
   if(this->engaged){
     return std::invoke(std::forward<Callable>(f),std::move(*this->ptr()));
   }
-  return R{};
+  return lib::null_opt;
 }
 
 template<typename Callable, typename R = std::invoke_result_t<Callable,const T&>, typename = std::enable_if_t<lib::is_optional_v<R>>>
@@ -206,7 +206,7 @@ R add_then(Callable&& f)const & noexcept(std::is_nothrow_invocable_v<Callable, c
   if(this->engaged){
     return std::invoke(std::forward<Callable>(f), *this->ptr());
   }
-  return R{};
+  return lib::null_opt;
 }
 
 
@@ -215,7 +215,7 @@ R add_then(Callable&& f)const && noexcept(std::is_nothrow_invocable_v<Callable,c
   if(this->engaged){
     return std::invoke(std::forward<Callable>(f), std::move(*this->ptr()));
   }
-  return R{};
+  return lib::null_opt;
 }
 
 //2) std::transform
@@ -225,7 +225,7 @@ R transform(Callable&& f)& noexcept(std::is_nothrow_invocable_v<Callable,T&>){
   if(this->has_value){
     return std::invoke(std::forward<Callable>(f), *this->ptr());
   }
-  return R{};
+  return lib::null_opt;
 }
   
 template<typename Callable,typename R = std::invoke_result_t<Callable,T&&> ,typename = std::enable_if_t<!lib::is_optional_v<R>>>
@@ -233,7 +233,7 @@ R transform(Callable&& f)&& noexcept(std::is_nothrow_invocable_v<Callable,T&&>){
   if(this->has_value){
     return std::invoke(std::forward<Callable>(f), std::move(*this->ptr()));
   }
-  return R{};
+  return lib::null_opt;
 }
 
 template<typename Callable,typename R = std::invoke_result_t<Callable,const T&>,typename = std::enable_if_t<!lib::is_optional_v<R>>>
@@ -241,7 +241,7 @@ R transform(Callable&& f)const & noexcept(std::is_nothrow_invocable_v<Callable,c
   if(this->has_value){
     return std::invoke(std::forward<Callable>(f),*this->ptr());
   }
-  return R{};
+  return lib::null_opt;
 }
 
 template<typename Callable,typename R = std::invoke_result_t<Callable,T&&>,typename = std::enable_if_t<!lib::is_optional_v<R>>>
@@ -249,7 +249,7 @@ R transform(Callable&& f)const && noexcept(std::is_nothrow_invocable_v<Callable,
   if(this->has_value){
     return std::invoke(std::forward<Callable>(f), std::move(*this->ptr()));
   }
-  return R{};
+  return lib::null_opt;
 }
 
 
@@ -264,7 +264,7 @@ R or_else(Callable&& f)& noexcept(std::is_nothrow_invocable_v<Callable>){
   }else{
     return std::invoke(std::forward<Callable>(f));
   }
-  return R{};
+  return lib::null_opt;
 }
 
 template<typename Callable,typename R = std::invoke_result_t<Callable>,typename = std::enable_if_t<lib::is_optional_v<R>>>
@@ -275,7 +275,7 @@ R or_else(Callable&& f)&& noexcept (std::is_nothrow_invocable_v<Callable>){
   }else{
     return std::invoke(std::forward<Callable>(f));
   }
-  return R{};
+  return lib::null_opt;
 }
 
 
@@ -287,7 +287,7 @@ R or_else(Callable&& f) const & noexcept (std::is_nothrow_invocable_v<Callable>)
   }else{
     return std::invoke(std::forward<Callable>(f));
   }
-  return R{};
+  return lib::null_opt;
 
 }
 
@@ -298,7 +298,7 @@ R or_else(Callable&& f) const && noexcept(std::is_nothrow_invocable_v<Callable>)
   }else{
     return std::invoke(std::forward<Callable>(f));
   }
-  return R{};
+  return lib::null_opt;
 }
 
 
